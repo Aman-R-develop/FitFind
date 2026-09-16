@@ -1,0 +1,176 @@
+/* FitFind — page-specific stylesheet */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: "Manrope", Arial, sans-serif;
+  background: #f8f6f2;
+  color: #171717;
+  line-height: 1.5;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+button,
+input {
+  font: inherit;
+}
+button {
+  border: 0;
+  cursor: pointer;
+}
+img {
+  display: block;
+  max-width: 100%;
+}
+.container {
+  width: min(1180px, 92%);
+  margin: auto;
+}
+.nav {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  white-space: nowrap;
+}
+.logo span {
+  color: #ef6d73;
+}
+.nav-links {
+  display: flex;
+  gap: 28px;
+  font-size: 14px;
+  color: #555;
+}
+.nav-links a:hover,
+.nav-links .active {
+  color: #111;
+}
+.nav-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.btn {
+  display: inline-block;
+  background: #111;
+  color: #fff;
+  padding: 13px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+.btn:hover {
+  opacity: 0.88;
+}
+.btn.light {
+  background: #fff;
+  color: #111;
+  border: 1px solid #ddd;
+}
+.btn.pink {
+  background: #ef6d73;
+}
+.section {
+  padding: 75px 0;
+}
+.section-title {
+  text-align: center;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 40px;
+  font-weight: 500;
+}
+.section-sub {
+  text-align: center;
+  color: #777;
+  margin: 10px auto 40px;
+}
+.footer {
+  padding: 45px 0;
+  border-top: 1px solid #e7e3de;
+  margin-top: 70px;
+  color: #777;
+  font-size: 13px;
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.page-head {
+  padding: 35px 0 25px;
+}
+.page-head h1 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 42px;
+  font-weight: 500;
+}
+.page-head p {
+  color: #777;
+  margin-top: 8px;
+}
+.profile {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 30px;
+}
+.side {
+  background: #fff;
+  border: 1px solid #e7e3de;
+  border-radius: 16px;
+  padding: 20px;
+}
+.side a {
+  display: block;
+  padding: 12px;
+  border-radius: 9px;
+  color: #666;
+}
+.side a.active {
+  background: #f9e8e8;
+  color: #111;
+}
+.profile-card {
+  background: #fff;
+  border: 1px solid #e7e3de;
+  border-radius: 16px;
+  padding: 30px;
+}
+.big-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.form {
+  display: grid;
+  gap: 15px;
+  margin-top: 25px;
+}
+.input {
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  background: #fafafa;
+  width: 100%;
+}

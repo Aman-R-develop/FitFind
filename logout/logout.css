@@ -1,0 +1,10 @@
+/* The two account pages use the same card design. */
+@import url("../login/login.css");
+
+.account-card {
+  text-align: center;
+}
+.actions {
+  justify-content: center;
+  margin-top: 25px;
+}

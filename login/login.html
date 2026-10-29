@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet" />
+    <title>Login — FitFind</title>
+    <link rel="stylesheet" href="login.css" />
+    <link rel="stylesheet" href="../common.css" />
+  </head>
+  <body>
+    <div class="container">
+      <nav class="nav">
+        <a class="logo" href="../index/index.html"><span>♡</span> FitFind</a>
+        <div class="nav-links">
+          <a href="../index/index.html">Home</a>
+          <a href="../how-it-works/how-it-works.html">How It Works</a>
+          <a href="../features/features.html">Features</a>
+          <a href="../about/about.html">About</a>
+        </div>
+        <a class="btn light" href="../profile/profile.html">Profile</a>
+      </nav>
+      <main class="account-card">
+        <div class="account-icon">♡</div>
+        <h1>Welcome to FitFind</h1>
+        <p>Log in and start exploring your next look.</p>
+        <p class="note">This is a demo login. Enter a name and email to try it.</p>
+        <p class="note">On submit, choose data/logins.json and allow editing to save your details in that file. Use desktop Chrome or Edge.</p>
+        <form id="login-form" novalidate>
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" autocomplete="name" minlength="2" maxlength="60" placeholder="Your name" required />
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required />
+          <p id="message" role="status" aria-live="polite"></p>
+          <button class="btn" id="login-button" type="submit">Log in</button>
+        </form>
+        <a class="back-link" id="continue-link" href="../profile/profile.html" hidden>Continue to profile</a>
+        <a class="back-link" href="../index/index.html">Back to home</a>
+        <noscript>Please enable JavaScript to use the demo login.</noscript>
+      </main>
+    </div>
+    <footer class="footer"><div class="container">© 2026 FitFind</div></footer>
+    <script src="login.js"></script>
+  </body>
+</html>

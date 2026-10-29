@@ -11,6 +11,7 @@
     />
     <title>How It Works — FitFind</title>
     <link rel="stylesheet" href="how-it-works.css" />
+    <link rel="stylesheet" href="../common.css" />
   </head>
   <body>
     <div class="container">
@@ -22,6 +23,7 @@
             >How It Works</a
           ><a href="../features/features.html">Features</a
           ><a href="../about/about.html">About</a>
+          <a id="account-link" href="../login/login.html">Login</a>
         </div>
         <a class="btn" href="../upload/upload.html">Get Started</a>
       </nav>
@@ -81,6 +83,17 @@
           </div>
         </div>
       </section>
+      <section class="faq">
+        <h2 class="section-title">A little help</h2>
+        <button class="faq-question" type="button" aria-expanded="false" aria-controls="answer-one">Which images can I choose?</button>
+        <p id="answer-one" hidden>Choose a JPG, PNG or WEBP image up to 5 MB. The upload page shows a preview.</p>
+        <button class="faq-question" type="button" aria-expanded="false" aria-controls="answer-two">Can I explore without logging in?</button>
+        <p id="answer-two" hidden>Yes! All pages are open to explore. The demo login lets you see your name on your profile.</p>
+        <button class="faq-question" type="button" aria-expanded="false" aria-controls="answer-three">Are the matches live recommendations?</button>
+        <p id="answer-three" hidden>The matches are example outfits for this student project. Try the store links to explore more.</p>
+      </section>
     </div>
+    <script src="../common.js"></script>
+    <script src="how-it-works.js"></script>
   </body>
 </html>

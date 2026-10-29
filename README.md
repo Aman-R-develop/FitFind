@@ -75,24 +75,54 @@ FitFind/
 
 ## ▶️ How to Run the Project
 
-Because FitFind currently uses HTML and CSS, no special backend setup is required.
+The pages use HTML, CSS and simple JavaScript. No server, Node.js or packages
+are needed.
 
-### Option 1 — Open directly
+1. Open `index/index.html` in desktop Chrome or Edge.
+2. Click **Login**, enter a name and email, and submit.
+3. In the file picker, select the existing `data/logins.json` in your FitFind folder.
+4. Allow editing if the browser asks. The new entry is added to that same file.
+5. Click **Continue to profile** to see your name and email.
+6. Use **Logout** in the navigation and click **Log out** to end the demo session.
 
-Open:
+There is no download. Each submission reads the selected file, adds the new entry
+to its array, and writes back to that file. Previous entries stay in the array.
+Choose the file in the project's `data` folder, not an older downloaded copy.
+The browser requires you to select a file and grant write access; a webpage
+cannot silently access a file by its folder path. The file picker opens on each
+submission. Browsers without this file-editing feature show an explanation.
+Invalid JSON is reported without overwriting it.
 
-```text
-index/index.html
+### New files and interactions
+
+- `login/`: the only form, with name and email validation and a submit button.
+- `logout/`: a logout button and links back to login and home; no form.
+- `login/login.js`: validates the form, opens a file picker, and updates the
+  selected JSON file using the browser's File System Access API.
+- `data/logins.json`: starts as an empty array; select this file to add submissions.
+- `common.js`: shows Login or Logout in navigation and fills the profile text.
+- `common.css`: shared navigation, keyboard focus and hidden-element styles.
+- `upload/upload.js`: image type/size checks and a local image preview.
+- `how-it-works/how-it-works.js`: buttons that show and hide help answers.
+
+This is a classroom demo login, not a real account system. It does not use
+passwords or restrict access to pages. The current name and email are kept in
+`sessionStorage` for the browser tab. Logout removes those values; saved entries
+stay in the JSON file. Form details are not sent to a server.
+If your browser blocks session storage for directly opened HTML files, file saving
+can still work, but your profile may not remember the login.
+
+Example saved entry:
+
+```json
+[
+  {
+    "name": "Demo Student",
+    "email": "student@example.com",
+    "submittedAt": "2026-10-28T10:00:00.000Z"
+  }
+]
 ```
-
-in a web browser.
-
-### Option 2 — Use VS Code
-
-1. Open the FitFind folder in VS Code.
-2. Open `index/index.html`.
-3. Use **Live Server** if it is installed.
-4. Open the local URL shown by Live Server.
 
 ## 🌿 GitHub Team Workflow
 

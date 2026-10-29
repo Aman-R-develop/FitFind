@@ -11,6 +11,7 @@
     />
     <title>Profile — FitFind</title>
     <link rel="stylesheet" href="profile.css" />
+    <link rel="stylesheet" href="../common.css" />
   </head>
   <body>
     <div class="container">
@@ -21,44 +22,40 @@
           ><a href="../upload/upload.html">Find a Look</a
           ><a href="../my-looks/my-looks.html">My Looks</a
           ><a class="active" href="../profile/profile.html">Profile</a>
+          <a id="account-link" href="../login/login.html">Login</a>
         </div>
         <a class="btn" href="../upload/upload.html">Find a Look</a>
       </nav>
       <div class="page-head">
         <h1>Your profile</h1>
-        <p>Manage your basic details and shopping preferences.</p>
+        <p>Your basic details and shopping preferences.</p>
       </div>
       <div class="profile">
         <aside class="side">
           <a class="active" href="../profile/profile.html">Profile</a
           ><a href="../my-looks/my-looks.html">My Looks</a
           ><a href="../favorites/favorites.html">Favorites</a
-          ><a href="#">Recently Viewed</a><a href="#">Settings</a>
+          ><a href="../results/results.html">View Matches</a>
+          <a href="../login/login.html">Login</a>
+          <a href="../logout/logout.html">Logout</a>
         </aside>
         <div class="profile-card">
           <img
             class="big-avatar"
             src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80"
           />
-          <h2 style="margin-top: 15px">Style Explorer</h2>
-          <p style="color: #777">Member since 2026</p>
-          <div class="form">
-            <label>Name</label
-            ><input class="input" value="Style Explorer" /><label
-              >Preferred stores</label
-            ><input
-              class="input"
-              value="Myntra, Amazon, Flipkart, Meesho, Nykaa"
-            /><label>Style preference</label
-            ><input class="input" value="Casual · Minimal · Everyday" /><button
-              class="btn"
-              style="width: max-content"
-            >
-              Save changes
-            </button>
+          <h2 id="profile-name" style="margin-top: 15px">Style Explorer</h2>
+          <p id="profile-email" style="color: #777">Log in to see your details here.</p>
+          <div class="profile-details">
+            <h3>Preferred stores</h3>
+            <p>Myntra, Amazon, Flipkart, Meesho, Nykaa</p>
+            <h3>Style preference</h3>
+            <p>Casual · Minimal · Everyday</p>
+            <a class="btn" href="../login/login.html">Update login details</a>
           </div>
         </div>
       </div>
     </div>
+    <script src="../common.js"></script>
   </body>
 </html>

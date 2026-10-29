@@ -180,3 +180,12 @@ img {
   opacity: 0;
   pointer-events: none;
 }
+#preview {
+  max-width: 280px;
+  max-height: 280px;
+  margin: 15px auto;
+  border-radius: 12px;
+}
+#upload-message {
+  margin-top: 15px;
+}

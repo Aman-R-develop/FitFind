@@ -157,3 +157,29 @@ img {
   color: #777;
   font-size: 14px;
 }
+.faq {
+  max-width: 700px;
+  margin: 0 auto 60px;
+}
+.faq-question {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 20px;
+  margin-top: 15px;
+  background: white;
+  border: 1px solid #e7e3de;
+  border-radius: 10px;
+}
+.faq-question[aria-expanded="true"] {
+  background: #f9e8e8;
+}
+.faq p {
+  padding: 15px 20px;
+  color: #666;
+}
+@media (max-width: 600px) {
+  .how {
+    grid-template-columns: 1fr;
+  }
+}

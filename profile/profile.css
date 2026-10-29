@@ -162,15 +162,16 @@ img {
   border-radius: 50%;
   object-fit: cover;
 }
-.form {
+.profile-details {
   display: grid;
   gap: 15px;
   margin-top: 25px;
 }
-.input {
-  padding: 14px;
-  border: 1px solid #ddd;
-  border-radius: 9px;
-  background: #fafafa;
-  width: 100%;
+.profile-details .btn {
+  width: fit-content;
+}
+@media (max-width: 700px) {
+  .profile {
+    grid-template-columns: 1fr;
+  }
 }

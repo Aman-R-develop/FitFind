@@ -1,0 +1,26 @@
+/* Shared small fixes for every page. */
+[hidden] {
+  display: none !important;
+}
+.nav,
+.nav-links {
+  flex-wrap: wrap;
+}
+.nav {
+  padding: 16px 0;
+}
+.nav-links {
+  row-gap: 12px;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #ef6d73;
+  outline-offset: 4px;
+}
+@media (max-width: 700px) {
+  .nav-links {
+    order: 3;
+    width: 100%;
+    gap: 14px;
+  }
+}

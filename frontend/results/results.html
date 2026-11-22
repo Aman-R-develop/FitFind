@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>Matches — FitFind</title>
+    <link rel="stylesheet" href="results.css" />
+    <link rel="stylesheet" href="../common.css" />
+  </head>
+  <body>
+    <div class="container">
+      <nav class="nav">
+        <a class="logo" href="../index/index.html"><span>♡</span> FitFind</a>
+        <div class="nav-links">
+          <a href="../index/index.html">Home</a
+          ><a href="../upload/upload.html">Find a Look</a
+          ><a class="active" href="../results/results.html">Matches</a
+          ><a href="../my-looks/my-looks.html">My Looks</a>
+          <a id="account-link" href="../login/login.html">Login</a>
+        </div>
+        <div class="nav-right">
+          <a href="../profile/profile.html">Profile</a>
+        </div>
+      </nav>
+      <div class="page-head">
+        <h1>Find inspiration for your next look.</h1>
+        <p>Browse sample products and save ideas to your account.</p>
+      </div>
+      <div class="results-grid">
+        <div>
+          <div class="main-image">
+            <img alt="Fashion inspiration"
+              src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=800&q=80"
+            />
+          </div>
+          <div class="tag-list">
+            <span class="tag">Soft pink</span><span class="tag">Casual</span
+            ><span class="tag">Everyday</span>
+          </div>
+
+        </div>
+        <div>
+          <h2 class="complete-title">Explore the catalog</h2>
+          <p class="score">Sample products and illustrative prices. Store links open homepages. Uploaded images are previewed locally; automatic matching is not available yet.</p>
+          <div class="catalog-controls">
+            <label for="catalog-source">Catalog</label>
+            <select id="catalog-source"><option value="local">Sample catalog</option><option value="external">External sample catalog</option></select>
+            <button id="refresh-catalog" class="btn light" type="button">Refresh</button>
+          </div>
+          <p id="catalog-message" class="status" role="status" aria-live="polite"></p>
+          <div class="shopping" id="catalog"></div>
+        </div>
+      </div>
+      <section class="section inspiration-section">
+        <h2 class="section-title inspiration-title">More outfit inspiration</h2>
+        <div class="container inspiration">
+          <img alt="Fashion inspiration"
+            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=500&q=80"
+          /><img alt="Fashion inspiration"
+            src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=500&q=80"
+          /><img alt="Fashion inspiration"
+            src="https://images.unsplash.com/photo-1485968579580-b6d095142e6e?auto=format&fit=crop&w=500&q=80"
+          /><img alt="Fashion inspiration"
+            src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=500&q=80"
+          /><img alt="Fashion inspiration"
+            src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=500&q=80"
+          />
+        </div>
+      </section>
+    </div>
+    <script src="../common.js"></script>
+    <script src="results.js"></script>
+  </body>
+</html>

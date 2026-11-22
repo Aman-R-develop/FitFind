@@ -1,6 +1,6 @@
 # FitFind
 
-FitFind uses plain HTML, CSS and JavaScript in `frontend/`, with a Node.js and Express backend in `backend/`. The original visual design is preserved, with working account forms, saved looks, favorites, preferences and mobile layout fixes.
+FitFind uses plain HTML, CSS and JavaScript in `frontend/`, with a Node.js and Express backend in `backend/`. The original visual is preserved, with working account forms, saved looks, favorites, preferences and mobile layout fixes.
 
 ## What works
 

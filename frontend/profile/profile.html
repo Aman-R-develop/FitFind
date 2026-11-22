@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>Profile — FitFind</title>
+    <link rel="stylesheet" href="profile.css" />
+    <link rel="stylesheet" href="../common.css" />
+  </head>
+  <body>
+    <div class="container">
+      <nav class="nav">
+        <a class="logo" href="../index/index.html"><span>♡</span> FitFind</a>
+        <div class="nav-links">
+          <a href="../index/index.html">Home</a
+          ><a href="../upload/upload.html">Find a Look</a
+          ><a href="../my-looks/my-looks.html">My Looks</a
+          ><a class="active" href="../profile/profile.html">Profile</a>
+          <a id="account-link" href="../login/login.html">Login</a>
+        </div>
+        <a class="btn" href="../upload/upload.html">Find a Look</a>
+      </nav>
+      <div class="page-head">
+        <h1>Your profile</h1>
+        <p>Your basic details and shopping preferences.</p>
+      </div>
+      <div class="profile">
+        <aside class="side">
+          <a class="active" href="../profile/profile.html">Profile</a
+          ><a href="../my-looks/my-looks.html">My Looks</a
+          ><a href="../favorites/favorites.html">Favorites</a
+          ><a href="../results/results.html">View Matches</a>
+          <a href="../login/login.html">Login</a>
+          <a href="../logout/logout.html">Logout</a>
+        </aside>
+        <div class="profile-card">
+          <img alt="Fashion inspiration"
+            class="big-avatar"
+            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80"
+          />
+          <h2 id="profile-name" class="profile-name">Style Explorer</h2>
+          <p id="profile-email" class="profile-email">Log in to see your details here.</p>
+          <div class="profile-details">
+            <p id="profile-message" class="status" role="status" aria-live="polite"></p>
+            <form id="profile-form" class="api-form" hidden>
+              <label for="edit-name">Name</label>
+              <input id="edit-name" minlength="2" maxlength="60" autocomplete="name" required />
+              <button class="btn" type="submit">Update name</button>
+            </form>
+            <h3>Shopping preferences</h3>
+            <p id="preferences-message" class="status" role="status" aria-live="polite"></p>
+            <form id="preferences-form" class="api-form" hidden>
+              <label for="stores">Preferred stores (separate with commas)</label>
+              <input id="stores" maxlength="608" placeholder="Myntra, Amazon" />
+              <label for="style">Style preference</label>
+              <input id="style" maxlength="100" placeholder="Casual, minimal, everyday" />
+              <button class="btn" type="submit">Save preferences</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="../common.js"></script>
+    <script src="profile.js"></script>
+  </body>
+</html>

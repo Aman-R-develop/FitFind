@@ -1,0 +1,66 @@
+/* Reuse the same fonts, navigation and buttons as the home page. */
+@import url("../index/index.css");
+
+.account-card {
+  max-width: 480px;
+  margin: 55px auto;
+  padding: 35px;
+  background: white;
+  border: 1px solid #e7e3de;
+  border-radius: 18px;
+}
+.account-icon {
+  color: #ef6d73;
+  font-size: 40px;
+}
+h1 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 34px;
+  font-weight: 500;
+}
+.account-card p {
+  color: #666;
+  margin: 12px 0;
+}
+.note {
+  font-size: 13px;
+}
+form {
+  display: grid;
+  gap: 12px;
+  margin-top: 25px;
+}
+label {
+  font-weight: 700;
+}
+input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  background: #fafafa;
+}
+input:focus {
+  outline: 2px solid #ef6d73;
+  outline-offset: 2px;
+}
+#message {
+  color: #a32936;
+  min-height: 24px;
+  margin: 0;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.back-link {
+  display: inline-block;
+  margin-top: 22px;
+  text-decoration: underline;
+}
+@media (max-width: 600px) {
+  .account-card {
+    padding: 24px;
+    margin: 30px auto;
+  }
+}

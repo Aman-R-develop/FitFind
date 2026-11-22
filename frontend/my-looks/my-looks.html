@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>My Looks — FitFind</title>
+    <link rel="stylesheet" href="my-looks.css" />
+    <link rel="stylesheet" href="../common.css" />
+  </head>
+  <body data-collection="looks">
+    <div class="container">
+      <nav class="nav">
+        <a class="logo" href="../index/index.html"><span>♡</span> FitFind</a>
+        <div class="nav-links">
+          <a href="../index/index.html">Home</a
+          ><a href="../upload/upload.html">Find a Look</a
+          ><a class="active" href="../my-looks/my-looks.html">My Looks</a
+          ><a href="../favorites/favorites.html">Favorites</a>
+          <a id="account-link" href="../login/login.html">Login</a>
+        </div>
+        <a href="../profile/profile.html">Profile</a>
+      </nav>
+      <div class="page-head">
+        <h1>My Saved Looks</h1>
+        <p>Keep your favorite combinations together.</p>
+      </div>
+      <p id="items-message" class="status" role="status" aria-live="polite"></p>
+      <p><a class="text-link" href="../login/login.html">Manage account</a> · <a class="text-link" href="../results/results.html">Browse catalog</a></p>
+      <form id="item-form" class="api-form" hidden>
+        <h2>Add or edit an item</h2>
+        <label for="item-title">Title</label>
+        <input id="item-title" name="title" minlength="2" maxlength="100" required />
+        <label for="item-notes">Notes</label>
+        <textarea id="item-notes" name="notes" maxlength="1000" rows="3"></textarea>
+        <label for="item-image">Image URL (optional, HTTPS)</label>
+        <input id="item-image" name="imageUrl" type="url" maxlength="2000" placeholder="https://..." />
+        <label for="item-link">Product or store URL (optional, HTTPS)</label>
+        <input id="item-link" name="productUrl" type="url" maxlength="2000" placeholder="https://..." />
+        <div class="item-actions">
+          <button id="save-item" class="btn" type="submit">Save item</button>
+          <button id="cancel-edit" class="btn light" type="button" hidden>Cancel edit</button>
+        </div>
+      </form>
+      <button id="refresh-items" class="btn light" type="button">Refresh items</button>
+      <p id="empty-message" class="status" hidden>No saved items yet. Add one above or browse the catalog.</p>
+      <div class="look-grid" id="saved-list"></div>
+      <div class="pagination">
+        <button id="previous-page" class="btn light" type="button" disabled>Previous</button>
+        <span id="page-number">Page 1</span>
+        <button id="next-page" class="btn light" type="button" disabled>Next</button>
+      </div>
+    </div>
+    <script src="../common.js"></script>
+    <script src="../saved-items.js"></script>
+  </body>
+</html>

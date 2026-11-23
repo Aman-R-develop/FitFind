@@ -8,9 +8,8 @@ const preferencesRoutes = require('./routes/preferences');
 const productRoutes = require('./routes/products');
 const { Look, Favorite } = require('./models/SavedItem');
 
-function createApp(config, sessionStore, options = {}) {
+function createApp(config, sessionStore, options = {}, app = express()) {
   if (!sessionStore) throw new Error('A persistent session store is required.');
-  const app = express();
   app.disable('x-powered-by');
   app.set('trust proxy', config.proxyHops);
   app.use(helmet({

@@ -1,3 +1,4 @@
+const express = require('express');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const { readConfig } = require('./config');
@@ -31,9 +32,10 @@ async function connectDatabase() {
 const sessionStore = MongoStore.create({ mongoUrl: config.mongoUri, collectionName: 'sessions' });
 sessionStore.on('error', () => console.error('Session store error. Check MongoDB connectivity.'));
 
-const app = createApp(config, sessionStore, {
+const app = express();
+createApp(config, sessionStore, {
   ensureDatabase: connectDatabase,
   isReady: () => mongoose.connection.readyState === 1
-});
+}, app);
 
 module.exports = app;

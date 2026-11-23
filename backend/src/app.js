@@ -66,7 +66,9 @@ function createApp(config, sessionStore, options = {}) {
     next();
   });
   app.use('/api', express.json({ limit: '32kb' }));
-  app.use('/api', session({
+  // Public routes such as the health check and API root must not wait for
+  // Mongo-backed session loading. Attach sessions only to account data routes.
+  app.use(['/api/auth', '/api/looks', '/api/favorites', '/api/preferences'], session({
     name: 'fitfind.sid', secret: config.secret, store: sessionStore,
     resave: false, saveUninitialized: false,
     cookie: { httpOnly: true, sameSite: 'lax', secure: config.production, maxAge: 7 * 24 * 60 * 60 * 1000 }

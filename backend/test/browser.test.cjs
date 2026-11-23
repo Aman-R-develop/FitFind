@@ -8,7 +8,7 @@ const { chromium, expect } = require('@playwright/test');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
-const createApp = require('../src/app');
+const createApp = require('../src/create-app');
 const User = require('../src/models/User');
 
 let database, server, browser, directory, origin;

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const { readConfig } = require('./config');
-const createApp = require('./app');
+const createApp = require('./create-app');
 const User = require('./models/User');
 const { Look, Favorite } = require('./models/SavedItem');
 const Preferences = require('./models/Preferences');

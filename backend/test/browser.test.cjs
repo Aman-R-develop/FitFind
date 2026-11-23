@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const os = require('node:os');
+const express = require('express');
 const { chromium, expect } = require('@playwright/test');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
@@ -18,10 +19,14 @@ before(async () => {
   await User.init();
   const config = {
     production: false, proxyHops: 0, secret: 'browser-test-secret-with-32-characters',
-    origin: '', dataDir: directory, externalProducts: false
+    origin: '', externalProducts: false
   };
   const store = MongoStore.create({ client: mongoose.connection.getClient() });
-  const app = createApp(config, store);
+  // Production deploys the static frontend and API as separate Vercel projects.
+  // Compose them at one origin here to exercise the same-origin session flow.
+  const app = express();
+  app.use(express.static(path.join(__dirname, '../../frontend')));
+  app.use(createApp(config, store));
   server = app.listen(0, '127.0.0.1');
   await new Promise(resolve => server.once('listening', resolve));
   origin = 'http://127.0.0.1:' + server.address().port;
@@ -38,7 +43,7 @@ after(async () => {
   if (directory) await fs.rm(directory, { recursive: true, force: true });
 });
 
-test('browser: accounts, MongoDB CRUD, JSON preferences, catalog, and logout', { timeout: 90000 }, async () => {
+test('browser: accounts, MongoDB CRUD, preferences, catalog, and logout', { timeout: 90000 }, async () => {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));

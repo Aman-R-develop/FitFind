@@ -6,7 +6,7 @@ FitFind uses plain HTML, CSS and JavaScript in `frontend/`, with a Node.js and E
 
 - Register, log in, update your name and log out. Passwords are hashed; sessions are stored in MongoDB.
 - Create, read, update and delete your own looks and favorites through Express APIs and the website.
-- Save and fetch shopping preferences from private local JSON files through Express APIs.
+- Save and fetch shopping preferences from MongoDB through Express APIs.
 - Browse a local sample product catalog, or optionally fetch an external sample catalog from DummyJSON.
 - Test the APIs using the included Postman collection and environment.
 
@@ -46,9 +46,9 @@ You need Node.js 22 or newer and a running MongoDB database (local MongoDB Commu
    npm run dev
    ```
 
-5. Open **http://localhost:3000**. Choose **Login → Create account** to register.
+5. The backend listens at **http://localhost:3000** and serves the API. The frontend is a separate static site; deploy it separately or use the included browser integration tests.
 
-Express serves both the frontend and API from one origin. Do not open HTML files directly or use Live Server. Use the hostname in `APP_ORIGIN` consistently; `localhost` and `127.0.0.1` are different origins. If you change `PORT`, update `APP_ORIGIN` too.
+Locally, Express serves the API on `http://localhost:3000`. Do not open HTML files directly. Use the hostname in `APP_ORIGIN` consistently; `localhost` and `127.0.0.1` are different origins.
 
 For normal execution without automatic restarts:
 
@@ -73,16 +73,15 @@ FitFind/
 │   └── ...                    About, features, upload and help pages
 └── backend/
     ├── src/
-    │   ├── server.js          Connect MongoDB, start and stop the server
-    │   ├── app.js             Middleware, security, routes and static files
+    │   ├── index.js           Vercel Express function and MongoDB connection
+    │   ├── server.js          Local development listener
+    │   ├── app.js             Middleware, security and API routes
     │   ├── config.js          Read and validate environment variables
     │   ├── models/            MongoDB document shapes
     │   ├── routes/            Express request handlers
     │   ├── middleware/        Login requirement
-    │   ├── services/          JSON file storage
     │   └── utils/             Small input validation helpers
     ├── data/products.json    Public sample catalog, served through the API
-    ├── data/preferences/     Private JSON files created at runtime (ignored)
     ├── postman/              Importable collection and local environment
     ├── test/                 API and browser integration tests
     ├── .env                  Your private settings (ignored)
@@ -96,9 +95,9 @@ For example, saving a look starts in `frontend/saved-items.js`. It sends JSON to
 
 `routes/savedItems.js` supplies the same straightforward CRUD handlers for both looks and favorites. Every query includes the logged-in user's ID, so guessing another item's ID does not grant access. The owner is assigned by the server and cannot be submitted or changed by a client.
 
-Profile preferences use `GET /api/preferences` and `PUT /api/preferences`. They are stored in `backend/data/preferences/<user-id>.json`, outside the public frontend directory. Saves are queued per user and written to a temporary file before replacing the original, so concurrent requests do not produce partial JSON. A PUT replaces all preferences; the last completed save wins.
+Profile preferences use `GET /api/preferences` and `PUT /api/preferences`. They are stored in the MongoDB `preferences` collection, one document per user, so they persist across Vercel Function instances. A PUT replaces all preferences.
 
-The old browser file picker login has been removed. Names and email addresses alone no longer count as authentication.
+The frontend sends relative `/api` requests, so the included Vercel rewrite keeps pages, API calls and session cookies on the frontend domain. Names and email addresses alone do not count as authentication.
 
 ## Environment settings
 
@@ -110,10 +109,9 @@ The old browser file picker login has been removed. Names and email addresses al
 | `MONGODB_URI` | MongoDB connection string, including database name |
 | `SESSION_SECRET` | Random secret with at least 32 characters; keep it stable between restarts |
 | `TRUST_PROXY_HOPS` | `0` directly exposed; configure the exact number of trusted proxy hops when applicable |
-| `JSON_DATA_DIR` | Private preferences directory; relative paths resolve from `backend/` |
 | `ENABLE_EXTERNAL_PRODUCTS` | `true` enables the optional DummyJSON catalog; defaults to `false` |
 
-`.gitignore` excludes real `.env` files, dependencies, generated preferences and test artifacts. It explicitly allows `.env.example`. Never put secrets in frontend JavaScript or commit exported Postman environments containing real credentials.
+`.gitignore` excludes real `.env` files, dependencies and test artifacts. It explicitly allows `.env.example`. Never put secrets in frontend JavaScript or commit exported Postman environments containing real credentials.
 
 ## API reference
 
@@ -129,8 +127,8 @@ Base URL: `http://localhost:3000/api`
 | POST | `/auth/logout` | Destroy the session | No |
 | GET | `/products` | Local sample catalog | No |
 | GET | `/products?source=external` | Optional external sample catalog | No |
-| GET | `/preferences` | Read JSON preferences | Yes |
-| PUT | `/preferences` | Replace JSON preferences | Yes |
+| GET | `/preferences` | Read MongoDB preferences | Yes |
+| PUT | `/preferences` | Replace MongoDB preferences | Yes |
 | GET | `/looks` or `/favorites` | List your saved items | Yes |
 | POST | `/looks` or `/favorites` | Create an item | Yes |
 | GET | `/looks/:id` or `/favorites/:id` | Fetch one item | Yes |
@@ -167,7 +165,7 @@ Create a look or favorite:
 
 Only `title` is required (2–100 characters). Notes allow up to 1,000 characters. URLs must use HTTPS, or be empty. PATCH accepts any nonempty subset of these fields. Unknown fields are rejected. List endpoints accept `?page=1&limit=12`, with a maximum limit of 50, and return `{ items, page, limit, total }`.
 
-Save JSON preferences:
+Save preferences:
 
 ```json
 { "style": "Casual", "stores": ["Myntra", "Amazon"] }
@@ -188,7 +186,9 @@ Errors return `{ "error": "Readable message" }`. Common statuses are `400` inval
 5. Create requests save `lookId` and `favoriteId` into the environment. The following get, update and delete requests use these values automatically.
 6. Check the Tests results. The collection covers success responses, invalid input, deleted items and logged-out access. The external catalog request accepts `200`, `503` when disabled or `502` when the provider is unavailable.
 
-The collection deletes the looks and favorites it creates. It leaves its demo account and JSON preferences in the development database/storage. Use disposable demo credentials; do not run it against real user accounts.
+The collection deletes the looks and favorites it creates. It leaves its demo account and preferences in the development database. Use disposable demo credentials; do not run it against real user accounts.
+
+To run the collection against the deployed API, duplicate the local Postman environment, set `baseUrl` to the backend's Vercel domain (for example `https://fitfind-api.vercel.app`, without `/api` or a trailing slash), and use a disposable test account. Postman sends `X-FitFind-Request: 1` and keeps the session cookie in its cookie jar. The frontend domain is not needed for direct Postman calls.
 
 ## Optional external API
 
@@ -207,24 +207,23 @@ npm test
 npm run test:ui
 ```
 
-API tests run against a disposable, real MongoDB process using `mongodb-memory-server`. They do not connect to the database in `.env`. The first installation/run may download a MongoDB test binary. Tests cover CRUD, two-user isolation, session persistence and revocation, validation, JSON persistence/concurrency, private-file protection, rate limiting and external-provider success/failure cases.
+API tests run against a disposable MongoDB process using `mongodb-memory-server`. They do not connect to the database in `.env`. The first installation/run may download a MongoDB test binary. Tests cover CRUD, two-user isolation, session persistence and revocation, validation, preferences, rate limiting and external-provider success/failure cases.
 
 Browser tests use headless Microsoft Edge on Windows. On other systems, install the test browser with `npx playwright install chromium`. To select an installed Chrome browser on Windows, set `$env:PLAYWRIGHT_CHANNEL = 'chrome'` before running the browser tests. They cover the account and saved-item flows and check all pages at a mobile width. Screenshots are written to the ignored `backend/test-results/` folder.
 
-## Production deployment
+## Production deployment on Vercel
 
-The backend includes hashed passwords, persistent MongoDB sessions, ownership checks, validation, body limits, rate limits, origin/header checks, Helmet security headers, private API cache controls and graceful shutdown. These choices follow the [Express security guidance](https://expressjs.com/en/advanced/best-practice-security/) and [session documentation](https://expressjs.com/en/resources/middleware/session/).
+The frontend and backend are two Vercel projects from the same GitHub repository. The frontend project serves static files; the backend project runs the Express API. Accounts, sessions, looks, favorites and preferences are stored in MongoDB. The backend does not write user data to the filesystem.
 
-For this version, deploy **one Node.js process with a persistent disk**:
+1. Push the repository to GitHub and import it into Vercel twice.
+2. For the backend project, set **Root Directory** to `backend`. Vercel detects `src/index.js` as the Express entry point. Leave the build command empty.
+3. Create or connect a MongoDB Atlas database. Add the production environment variables to the backend Vercel project: `NODE_ENV=production`, `MONGODB_URI`, a strong random `SESSION_SECRET`, `APP_ORIGIN` (the exact frontend HTTPS origin), and `TRUST_PROXY_HOPS=1`. Optionally set `ENABLE_EXTERNAL_PRODUCTS=true`.
+4. Deploy the backend and confirm `<backend-domain>/api/health` responds with `{"status":"ok"}`.
+5. Replace `YOUR-BACKEND-PROJECT.vercel.app` in `frontend/vercel.json` with your backend's production domain. Commit and push the change.
+6. For the frontend project, set **Root Directory** to `frontend` and deploy. Its `/api/*` rewrite proxies requests to the backend while keeping the browser and session cookie on the frontend domain.
+7. Test registration, login, logout, looks, favorites and preferences using the production frontend URL.
 
-1. Deploy both folders together; the backend serves `../frontend`.
-2. Run `npm ci --omit=dev` in `backend/`, then `npm start` under your host's process manager.
-3. Supply production environment variables through the host's secret settings. Use `NODE_ENV=production`, an HTTPS `APP_ORIGIN`, a fresh random `SESSION_SECRET` and an authenticated MongoDB connection.
-4. Terminate HTTPS at a trusted reverse proxy. Set `TRUST_PROXY_HOPS` to match that topology, and prevent clients from bypassing the proxy. Secure cookies will not work over plain HTTP in production.
-5. Point `JSON_DATA_DIR` to a private persistent disk directory and back it up alongside MongoDB. An ephemeral/serverless filesystem loses preferences on restart or redeployment.
-6. Monitor `/api/health` and server errors. Verify account, logout and CRUD flows through the actual HTTPS URL before opening the site to users.
-
-The JSON write queue and rate limit counters are process-local. Before running multiple workers or replicas, move preferences to shared database storage and use a shared rate limit store. This project is not configured for that deployment model. Email verification, password recovery and automatic image matching are not included.
+The rate limiter uses in-memory counters, which are per Function instance. Use Vercel Firewall rate limits or a shared rate-limit store for consistent limits. Email verification, password recovery and automatic image matching are not included.
 
 ## Troubleshooting
 
@@ -232,7 +231,7 @@ The JSON write queue and rate limit counters are process-local. Before running m
 - **Session secret error:** replace the template value with a generated random secret.
 - **403 on a write:** check `APP_ORIGIN`, use the matching website URL and include `X-FitFind-Request: 1` in Postman.
 - **Login does not stay signed in:** allow cookies; use HTTPS in production and verify trusted proxy settings.
-- **JSON read fails:** inspect and repair the affected private preference file or restore a backup. Corrupt JSON produces an error instead of silently becoming empty data.
+- **Preferences do not persist:** check that the backend's MongoDB Atlas URI and network access are correct.
 - **429:** wait for the 15-minute rate limit window. General APIs allow 300 requests per IP; account endpoints additionally limit unsuccessful attempts to 10 per IP in that window.
 
 ## Team workflow

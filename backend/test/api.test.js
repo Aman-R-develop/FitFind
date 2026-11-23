@@ -9,6 +9,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const request = require('supertest');
 const createApp = require('../src/app');
 const User = require('../src/models/User');
+const Preferences = require('../src/models/Preferences');
 const { Look, Favorite } = require('../src/models/SavedItem');
 const { readConfig } = require('../src/config');
 
@@ -27,7 +28,7 @@ before(async () => {
   config.dataDir = directory;
   database = await MongoMemoryServer.create();
   await mongoose.connect(database.getUri());
-  await Promise.all([User.init(), Look.init(), Favorite.init()]);
+  await Promise.all([User.init(), Look.init(), Favorite.init(), Preferences.init()]);
   store = MongoStore.create({ client: mongoose.connection.getClient() });
   app = createApp(config, store, { authLimit: 100 });
   alice = request.agent(app);
@@ -107,11 +108,12 @@ for (const collection of ['looks', 'favorites']) {
   });
 }
 
-test('JSON preferences persist on disk, remain private, and support complete replacement', async () => {
+test('MongoDB preferences persist per user and support complete replacement', async () => {
   const preferences = { style: 'Casual', stores: ['Myntra', 'Amazon'] };
   await write(alice, 'put', '/api/preferences', preferences).expect(200);
   assert.deepEqual((await alice.get('/api/preferences').expect(200)).body.preferences, preferences);
-  assert.deepEqual(JSON.parse(await fs.readFile(path.join(directory, aliceId + '.json'), 'utf8')), preferences);
+  const saved = await Preferences.findOne({ owner: aliceId }).lean();
+  assert.deepEqual({ style: saved.style, stores: saved.stores }, preferences);
   assert.deepEqual((await bob.get('/api/preferences').expect(200)).body.preferences, { style: '', stores: [] });
   await write(alice, 'put', '/api/preferences', { style: 'Minimal', stores: [] }).expect(200);
   assert.equal((await alice.get('/api/preferences')).body.preferences.style, 'Minimal');
@@ -119,16 +121,12 @@ test('JSON preferences persist on disk, remain private, and support complete rep
   await write(alice, 'put', '/api/preferences', { style: 'Casual', stores: [], owner: '../other' }).expect(400);
 });
 
-test('concurrent JSON writes always leave a complete file, and corrupt files are not concealed', async () => {
-  await Promise.all(Array.from({ length: 8 }, (_, i) => write(alice, 'put', '/api/preferences', { style: 'Style ' + i, stores: ['Shop ' + i] }).expect(200)));
-  const preferences = (await alice.get('/api/preferences').expect(200)).body.preferences;
-  assert.equal(preferences.style.slice(-1), preferences.stores[0].slice(-1));
-  assert.equal((await fs.readdir(directory)).filter(file => file.endsWith('.tmp')).length, 0);
-  const file = path.join(directory, aliceId + '.json');
-  await fs.writeFile(file, '{broken');
-  const response = await alice.get('/api/preferences').expect(500);
-  assert.equal(response.body.error, 'Something went wrong. Please try again.');
-  assert.equal(await fs.readFile(file, 'utf8'), '{broken');
+test('preferences are stored separately for each MongoDB user', async () => {
+  await write(alice, 'put', '/api/preferences', { style: 'Minimal', stores: ['Myntra'] }).expect(200);
+  await write(bob, 'put', '/api/preferences', { style: 'Streetwear', stores: ['Amazon'] }).expect(200);
+  assert.equal((await alice.get('/api/preferences').expect(200)).body.preferences.style, 'Minimal');
+  assert.equal((await bob.get('/api/preferences').expect(200)).body.preferences.style, 'Streetwear');
+  assert.equal(await Preferences.countDocuments(), 2);
 });
 
 test('write requests enforce origin/header, JSON type, parse errors, and body limit', async () => {
@@ -140,13 +138,13 @@ test('write requests enforce origin/header, JSON type, parse errors, and body li
   await write(alice, 'post', '/api/looks', { title: 'Large', notes: 'x'.repeat(40000) }).expect(413);
 });
 
-test('frontend loads with security headers and private files are never served', async () => {
-  await request(app).get('/').expect(302).expect('Location', '/index/index.html');
-  const home = await request(app).get('/index/index.html').expect(200);
-  assert.match(home.headers['content-security-policy'], /script-src 'self'/);
-  assert.equal(home.headers['x-content-type-options'], 'nosniff');
-  assert.equal(home.headers['x-powered-by'], undefined);
-  for (const url of ['/backend/.env', '/.env', '/data/logins.json', '/backend/data/products.json', '/src/server.js']) await request(app).get(url).expect(404);
+test('API returns security headers and does not serve frontend or private files', async () => {
+  const root = await request(app).get('/').expect(200);
+  assert.equal(root.body.name, 'FitFind API');
+  assert.match(root.headers['content-security-policy'], /script-src 'self'/);
+  assert.equal(root.headers['x-content-type-options'], 'nosniff');
+  assert.equal(root.headers['x-powered-by'], undefined);
+  for (const url of ['/index/index.html', '/backend/.env', '/.env', '/data/logins.json', '/backend/data/products.json', '/src/server.js']) await request(app).get(url).expect(404);
   await request(app).get('/api/missing').expect(404).expect('Content-Type', /json/);
   await request(app).get('/api/health').expect(200);
   await request(createApp(config, store, { isReady: () => false })).get('/api/health').expect(503);

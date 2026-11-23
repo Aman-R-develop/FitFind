@@ -17,7 +17,6 @@ function readConfig(env = process.env) {
   return {
     production, port, proxyHops, secret, origin: origin.origin,
     mongoUri: env.MONGODB_URI,
-    dataDir: path.resolve(__dirname, '..', env.JSON_DATA_DIR || './data/preferences'),
     externalProducts: env.ENABLE_EXTERNAL_PRODUCTS === 'true'
   };
 }

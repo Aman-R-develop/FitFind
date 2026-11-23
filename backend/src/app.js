@@ -1,4 +1,3 @@
-const path = require('node:path');
 const express = require('express');
 const session = require('express-session');
 const helmet = require('helmet');
@@ -36,6 +35,12 @@ function createApp(config, sessionStore, options = {}) {
     res.set('Cache-Control', 'no-store');
     next();
   });
+  if (options.ensureDatabase) {
+    app.use('/api', async (req, res, next) => {
+      try { await options.ensureDatabase(); next(); }
+      catch (error) { next(error); }
+    });
+  }
   app.use('/api', rateLimit({
     windowMs: 15 * 60 * 1000, limit: options.apiLimit || 300,
     standardHeaders: 'draft-8', legacyHeaders: false,
@@ -77,14 +82,13 @@ function createApp(config, sessionStore, options = {}) {
   app.use('/api/auth', authRoutes(config));
   app.use('/api/looks', savedItemRoutes(Look));
   app.use('/api/favorites', savedItemRoutes(Favorite));
-  app.use('/api/preferences', preferencesRoutes(config.dataDir));
+  app.use('/api/preferences', preferencesRoutes());
   app.use('/api/products', productRoutes(config, options.fetchProducts));
   app.use('/api', (req, res) => res.status(404).json({ error: 'API route not found.' }));
 
-  // Only frontend files are public. .env, MongoDB data and JSON preferences are private.
-  app.get('/', (req, res) => res.redirect('/index/index.html'));
-  app.use(express.static(path.join(__dirname, '../../frontend'), { dotfiles: 'deny', maxAge: 0 }));
-  app.use((req, res) => res.status(404).send('Page not found.'));
+  // The frontend is a separate Vercel static project. This deployment serves APIs only.
+  app.get('/', (req, res) => res.json({ name: 'FitFind API', health: '/api/health' }));
+  app.use((req, res) => res.status(404).json({ error: 'Route not found.' }));
   app.use((error, req, res, next) => {
     if (res.headersSent) return next(error);
     if (error.code === 11000) return res.status(409).json({ error: 'An account with that email already exists.' });

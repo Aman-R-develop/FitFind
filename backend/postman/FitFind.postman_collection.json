@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "FitFind API",
-    "description": "Run in order against a development database. Creates a demo account, checks JSON persistence and MongoDB CRUD, then logs out. Created looks and favorites are deleted; the demo account and preferences remain. Optional external products return 503 when disabled and 502 if the provider is unavailable.",
+    "description": "Run in order against a development database. Creates a demo account, checks MongoDB preferences and CRUD, then logs out. Created looks and favorites are deleted; the demo account and preferences remain. Optional external products return 503 when disabled and 502 if the provider is unavailable.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -239,7 +239,7 @@
       ]
     },
     {
-      "name": "07 - Read JSON preferences",
+      "name": "07 - Read preferences",
       "request": {
         "method": "GET",
         "header": [
@@ -267,7 +267,7 @@
       ]
     },
     {
-      "name": "08 - Save JSON preferences",
+      "name": "08 - Save preferences",
       "request": {
         "method": "PUT",
         "header": [
@@ -304,7 +304,7 @@
       ]
     },
     {
-      "name": "09 - Read saved JSON preferences",
+      "name": "09 - Read saved preferences",
       "request": {
         "method": "GET",
         "header": [

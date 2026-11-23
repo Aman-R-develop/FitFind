@@ -2,9 +2,11 @@
   "name": "fitfind-backend",
   "version": "1.0.0",
   "private": true,
-  "description": "Beginner-friendly Express API and static frontend for FitFind",
-  "main": "src/server.js",
-  "engines": { "node": ">=22.0.0" },
+  "description": "Production-ready Express API for FitFind",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
@@ -22,6 +24,7 @@
     "mongoose": "^8.19.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.1",
     "mongodb-memory-server": "^10.2.0",
     "supertest": "^7.1.4"
   }

@@ -10,7 +10,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://backendfitfind.vercel.app/"
+      "destination": "https://backendfitfind.vercel.app/api/:path*"
     }
   ]
 }

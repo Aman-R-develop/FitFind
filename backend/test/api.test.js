@@ -144,7 +144,7 @@ test('API returns security headers and does not serve frontend or private files'
   assert.match(root.headers['content-security-policy'], /script-src 'self'/);
   assert.equal(root.headers['x-content-type-options'], 'nosniff');
   assert.equal(root.headers['x-powered-by'], undefined);
-  for (const url of ['/index/index.html', '/backend/.env', '/.env', '/data/logins.json', '/backend/data/products.json', '/src/server.js']) await request(app).get(url).expect(404);
+  for (const url of ['/index/index.html', '/backend/.env', '/.env', '/data/logins.json', '/backend/data/products.json', '/src/server.js', '/src/dev-server.js']) await request(app).get(url).expect(404);
   await request(app).get('/api/missing').expect(404).expect('Content-Type', /json/);
   await request(app).get('/api/health').expect(200);
   await request(createApp(config, store, { isReady: () => false })).get('/api/health').expect(503);

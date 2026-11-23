@@ -74,7 +74,7 @@ FitFind/
 └── backend/
     ├── src/
     │   ├── index.js           Vercel Express function and MongoDB connection
-    │   ├── server.js          Local development listener
+    │   ├── dev-server.js      Local development listener
     │   ├── app.js             Middleware, security and API routes
     │   ├── config.js          Read and validate environment variables
     │   ├── models/            MongoDB document shapes
